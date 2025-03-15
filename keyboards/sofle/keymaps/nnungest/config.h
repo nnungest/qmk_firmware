@@ -20,6 +20,7 @@
 
 /* Select hand configuration */
 
+
 ///https://thomasbaart.nl/2018/12/01/reducing-firmware-size-in-qmk/
 
 #define CUSTOM_FONT
@@ -53,7 +54,7 @@
     #undef RGBLIGHT_LED_COUNT
 
 	//#define RGBLIGHT_EFFECT_BREATHING
-	#define RGBLIGHT_EFFECT_RAINBOW_MOOD
+	//#define RGBLIGHT_EFFECT_RAINBOW_MOOD
 	//#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
 	//#define RGBLIGHT_EFFECT_SNAKE
 	//#define RGBLIGHT_EFFECT_KNIGHT

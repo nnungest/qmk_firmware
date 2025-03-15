@@ -4,7 +4,7 @@
 #include QMK_KEYBOARD_H
 
 
-#define INDICATOR_BRIGHTNESS 15
+#define INDICATOR_BRIGHTNESS 10
 
 #define HSV_OVERRIDE_HELP(h, s, v, Override) h, s , Override
 #define HSV_OVERRIDE(hsv, Override) HSV_OVERRIDE_HELP(hsv,Override)
@@ -44,7 +44,7 @@ enum sofle_layers {
     _CONTROLLER,
     _LOWER,
     _RAISE,
-    _ADJUST,
+    _ADJUST
 };
 
 enum custom_keycodes {
@@ -223,22 +223,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
+// FIXME indicator light never stays the right color statically for each layer.
+// When im on colemak it should always be purple. QWERTY should always be blue,
+// etc...
 #ifdef RGBLIGHT_ENABLE
 char layer_state_str[70];
 // Now define the array of layers. Later layers take precedence
-
+// COLEMAK,
+const rgblight_segment_t PROGMEM layer_colemak_lights[] = RGBLIGHT_LAYER_SEGMENTS(
+  SET_INDICATORS(HSV_PURPLE),
+  SET_LAYER_ID(HSV_PURPLE)
+);
 // QWERTY,
 // Light on inner column and underglow
 const rgblight_segment_t PROGMEM layer_qwerty_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-  SET_INDICATORS(HSV_RED),
-  SET_LAYER_ID(HSV_RED)
+  SET_INDICATORS(HSV_BLUE),
+  SET_LAYER_ID(HSV_BLUE)
 );
-// COLEMAK,
-const rgblight_segment_t PROGMEM layer_colemak_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-  SET_INDICATORS(HSV_PINK),
-  SET_LAYER_ID(HSV_PINK)
-);
-
 // _CONTROLLER,
 // Light on inner column and underglow
 const rgblight_segment_t PROGMEM layer_controller_lights[] = RGBLIGHT_LAYER_SEGMENTS(
@@ -247,8 +248,8 @@ const rgblight_segment_t PROGMEM layer_controller_lights[] = RGBLIGHT_LAYER_SEGM
 );
 
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
-    layer_qwerty_lights,
 	layer_colemak_lights,
+    layer_qwerty_lights,
 	layer_controller_lights
 );
 
@@ -270,7 +271,8 @@ void keyboard_post_init_user(void) {
 }
 #endif
 
-
+// FIXME there is a bug here with encoder dialing, logic is reversed
+// turning encoder clockwise turns volume down for some reason on macos
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
