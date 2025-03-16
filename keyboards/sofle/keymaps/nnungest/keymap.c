@@ -18,22 +18,22 @@
     {35+1, 6,hsv}
 #define SET_INNER_COL(hsv)	\
 	{33, 4, hsv}, \
-	  {35+ 33, 4, hsv}
+	{35+ 33, 4, hsv}
 #define SET_OUTER_COL(hsv) \
 	{7, 4, hsv}, \
-	  {35+ 7, 4, hsv}
-#define SET_THUMB_CLUSTER(hsv) 	\
+	{35+ 7, 4, hsv}
+#define SET_THUMB_CLUSTER(hsv) \
 	{25, 2, hsv}, \
-	  {35+ 25, 2, hsv}
-#define SET_LAYER_ID(hsv) 	\
+	{35+ 25, 2, hsv}
+#define SET_LAYER_ID(hsv) \
 	{0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
     {35+0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
-		{1, 6, hsv}, \
-    {35+1, 6, hsv}, \
-		{7, 4, hsv}, \
-	  {35+ 7, 4, hsv}, \
-		{25, 2, hsv}, \
-	  {35+ 25, 2, hsv}
+    {1, 6, hsv},     \
+    {35+1, 6, hsv},  \
+	{7, 4, hsv},     \
+	{35+ 7, 4, hsv}, \
+	{25, 2, hsv},    \
+	{35+ 25, 2, hsv}
 
 
 enum sofle_layers {
@@ -67,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,   KC_Q,   KC_W,    KC_F,    KC_P,    KC_B,                      KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT,  KC_BSPC,
   KC_ESC,   KC_A,   KC_R,    KC_S,    KC_T,    KC_G,                      KC_M,    KC_N,    KC_E,    KC_I,    KC_O,  KC_QUOT,
   KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_D,    KC_V, KC_MUTE,      KC_NO,KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_RSFT,
-  TO(_QWERTY),KC_LALT,MO(_LOWER),KC_LGUI, LT(_RAISE, KC_BSPC),   LSFT_T(KC_SPC),  LCTL_T(KC_ENTER),  KC_LALT, KC_RCTL, KC_RGUI
+  TO(_QWERTY),MO(_ADJUST),MO(_LOWER),KC_LGUI, LT(_RAISE, KC_BSPC),   LSFT_T(KC_SPC),  LCTL_T(KC_ENTER),  KC_LALT, KC_RCTL, KC_RGUI
 ),
 
 /*
@@ -106,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_ADJUST] = LAYOUT(
   KC_NO, KC_NO,  KC_NO,  KC_NO, KC_NO, KC_NO,                     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
   KC_NO, KC_NO, KC_QWERTY, KC_COLEMAK,CG_TOGG,KC_NO,                     KC_NO, KC_LPRN, KC_RPRN, KC_RBRC, KC_NO, KC_NO,
-  KC_NO, KC_NO, CG_TOGG,   KC_NO,    KC_NO,  KC_NO,                     KC_NO, KC_VOLD, KC_MUTE, KC_VOLU, KC_NO, KC_NO,
+  KC_NO, KC_NO, CG_TOGG,   RM_HUEU,    KC_NO,  KC_NO,                     KC_NO, KC_VOLD, KC_MUTE, KC_VOLU, KC_NO, KC_NO,
   KC_NO, KC_NO, KC_NO,   KC_NO,    KC_NO,  KC_NO, KC_NO,     KC_NO, KC_NO, KC_MPRV, KC_MPLY, KC_MNXT, KC_NO, KC_NO,
                    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
   ),
@@ -153,28 +153,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// FIXME indicator light never stays the right color statically for each layer.
-// When im on colemak it should always be purple. QWERTY should always be blue,
-// etc...
 #ifdef RGBLIGHT_ENABLE
 char layer_state_str[70];
 // Now define the array of layers. Later layers take precedence
 // COLEMAK,
 const rgblight_segment_t PROGMEM layer_colemak_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-  SET_INDICATORS(HSV_PURPLE),
-  SET_LAYER_ID(HSV_PURPLE)
+  SET_INDICATORS(HSV_MAGENTA)
 );
 // QWERTY,
 // Light on inner column and underglow
 const rgblight_segment_t PROGMEM layer_qwerty_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-  SET_INDICATORS(HSV_BLUE),
-  SET_LAYER_ID(HSV_BLUE)
+  SET_INDICATORS(HSV_BLUE)
 );
 // _CONTROLLER,
 // Light on inner column and underglow
 const rgblight_segment_t PROGMEM layer_controller_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-  SET_INDICATORS(HSV_GREEN),
-  SET_LAYER_ID(HSV_GREEN)
+  SET_INDICATORS(HSV_GREEN)
 );
 
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
@@ -185,12 +179,9 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
 
 layer_state_t layer_state_set_user(layer_state_t state) {
 	rgblight_set_layer_state(0, layer_state_cmp(state, _DEFAULTS) &&
-                             layer_state_cmp(default_layer_state,_QWERTY));
-	rgblight_set_layer_state(1, layer_state_cmp(state, _LOWER));
-	rgblight_set_layer_state(2, layer_state_cmp(state, _RAISE));
-	rgblight_set_layer_state(3, layer_state_cmp(state, _ADJUST));
-	rgblight_set_layer_state(4, layer_state_cmp(state, _DEFAULTS) &&
                              layer_state_cmp(default_layer_state,_COLEMAK));
+	rgblight_set_layer_state(1, layer_state_cmp(state, _QWERTY));
+	rgblight_set_layer_state(2, layer_state_cmp(state, _CONTROLLER));
     return state;
 }
 void keyboard_post_init_user(void) {
