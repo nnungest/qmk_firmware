@@ -19,9 +19,17 @@
 	{1, 6, hsv}, \
     {35 + 1, 6,hsv}
 
+ #define SET_NUMROW(hsv) \
+     {10, 2, hsv},       \
+     {20, 2, hsv},       \
+     {30, 2, hsv},       \
+     {35 + 10, 2, hsv},  \
+     {35 + 20, 2, hsv},  \
+     {35 + 30, 2, hsv}
+
 #define SET_INNER_COL(hsv)	\
 	{33, 4, hsv}, \
-	{35+ 33, 4, hsv}
+	{35 + 33, 4, hsv}
 
 #define SET_OUTER_COL(hsv) \
 	{7, 4, hsv}, \
@@ -29,7 +37,7 @@
 
 #define SET_THUMB_CLUSTER(hsv) \
 	{25, 2, hsv}, \
-	{35+ 25, 2, hsv}
+	{35 + 25, 2, hsv}
 
 #define SET_LAYER_ID(hsv) \
 	{0, 1, HSV_OVERRIDE_HELP(hsv, INDICATOR_BRIGHTNESS)}, \
