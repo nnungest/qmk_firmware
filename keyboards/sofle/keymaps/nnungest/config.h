@@ -19,7 +19,7 @@
 //#define USE_MATRIX_I2C
 
 /* Select hand configuration */
-
+#define MASTER_LEFT
 
 ///https://thomasbaart.nl/2018/12/01/reducing-firmware-size-in-qmk/
 
